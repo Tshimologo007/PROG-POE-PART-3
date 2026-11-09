@@ -1,0 +1,99 @@
+﻿@model List<RaceCompetitionMVC.Models.EventViewModel>
+
+@{
+    var eventCategories = ViewBag.EventCategories
+    as Dictionary<int, List<RaceCompetitionMVC.Models.EventCategoryViewModel>>;
+}
+
+<h1>Available Race Events</h1>
+<p>Explore upcoming races and choose your preferred category.</p>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (Model == null || Model.Count == 0)
+{
+    <p>No events found.</p>
+}
+else
+{
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h4>@item.event_Name</h4>
+
+                        <p>@item.description</p>
+
+                        <p><strong>Date:</strong> @item.event_Date.ToShortDateString()</p>
+                        <p><strong>Type:</strong> @item.event_Type</p>
+                        <p><strong>Venue:</strong> @item.venue</p>
+                        <p><strong>Distance:</strong> @item.race_Distance</p>
+
+                        <hr />
+
+                        <h5>Available Categories</h5>
+
+                        @if (eventCategories != null &&
+                                        eventCategories.TryGetValue(item.eventID, out var categories) &&
+                                        categories.Count > 0)
+                        {
+                            <form asp-controller="Participant"
+                                  asp-action="Register"
+                                  method="post">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden"
+                                       name="eventID"
+                                       value="@item.eventID" />
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Select a category
+                                    </label>
+
+                                    <select name="eventCategoryID" class="form-select" required>
+                                        <option value="">-- Choose Category --</option>
+
+                                        @foreach (var category in categories)
+                                        {
+                                            <option value="@category.eventCategoryID">
+                                                @category.category_Name
+                                            </option>
+                                        }
+                                    </select>
+                                </div>
+
+                                <button type="submit" class="btn btn-success">
+                                    Enrol in Event
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <p class="text-muted">
+                                No categories have been added to this event yet.
+                            </p>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+

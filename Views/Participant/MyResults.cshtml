@@ -1,0 +1,58 @@
+﻿@using System.Text.Json
+@model List<JsonElement>
+
+<h1>My Race Results</h1>
+
+<p>View your completed race results and finishing positions.</p>
+
+@if (Model == null || Model.Count == 0)
+{
+    <div class="alert alert-info">
+        You don't have any race results yet.
+    </div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Date</th>
+                <th>Category</th>
+                <th>Distance</th>
+                <th>Finish Time</th>
+                <th>Position</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var result in Model)
+            {
+                <tr>
+                    <td>
+                        @result.GetProperty("event_Name").GetString()
+                    </td>
+                    <td>
+                        @result.GetProperty("event_Date").GetDateTime().ToShortDateString()
+                    </td>
+                    <td>
+                        @result.GetProperty("category_Name").GetString()
+                    </td>
+                    <td>
+                        @result.GetProperty("distance").GetString()
+                    </td>
+                    <td>
+                        @result.GetProperty("finish_time").GetString()
+                    </td>
+                    <td>
+                        @result.GetProperty("position").GetString()
+                    </td>
+                    <td>
+                        @result.GetProperty("completionStatus").GetString()
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+

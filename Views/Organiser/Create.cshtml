@@ -1,0 +1,75 @@
+﻿@model RaceCompetitionMVC.Models.CreateEventViewModel
+
+<h1>Create Race Event</h1>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+
+    <div class="form-group">
+        <label asp-for="event_Name"></label>
+        <input asp-for="event_Name" class="form-control" />
+        <span asp-validation-for="event_Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="description"></label>
+        <textarea asp-for="description" class="form-control"></textarea>
+        <span asp-validation-for="description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="townID"></label>
+        <input asp-for="townID" class="form-control" type="number" />
+        <span asp-validation-for="townID" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="event_Date"></label>
+        <input asp-for="event_Date" class="form-control" type="date" />
+        <span asp-validation-for="event_Date" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="event_Type"></label>
+        <input asp-for="event_Type" class="form-control" />
+        <span asp-validation-for="event_Type" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="venue"></label>
+        <input asp-for="venue" class="form-control" />
+        <span asp-validation-for="venue" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="race_Distance"></label>
+        <input asp-for="race_Distance" class="form-control" />
+        <span asp-validation-for="race_Distance" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="bannerFile">Event Banner Image</label>
+        <input asp-for="bannerFile"
+               type="file"
+               class="form-control"
+               accept="image/png,image/jpeg,image/webp" />
+        <span asp-validation-for="bannerFile" class="text-danger"></span>
+        <small class="text-muted">JPG, PNG or WEBP. Maximum 5 MB.</small>
+    </div>
+
+    <br />
+
+    <button type="submit" class="btn btn-success">
+        Create Event
+    </button>
+
+    <a asp-action="Events" class="btn btn-secondary">
+        Cancel
+    </a>
+
+</form>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <p class="text-danger">@ViewBag.ErrorMessage</p>
+}
+

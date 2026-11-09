@@ -1,0 +1,17 @@
+﻿<h1>Organiser Dashboard</h1>
+
+<p>Welcome to your organiser dashboard!</p>
+
+<form asp-controller="Account" asp-action="Logout" method="post">
+    @Html.AntiForgeryToken()
+
+    <button type="submit" class="btn btn-danger">
+        Logout
+    </button>
+</form>
+
+<a asp-controller="Organiser"
+   asp-action="Events"
+   class="btn btn-primary">
+    Manage Events
+</a>

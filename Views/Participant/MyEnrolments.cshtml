@@ -1,0 +1,97 @@
+﻿@model List<RaceCompetitionMVC.Models.EnrolmentViewModel>
+
+<div class="container py-4">
+
+    <div class="mb-4">
+        <h1 class="fw-bold">My Enrolments</h1>
+        <p class="text-muted">
+            View the races you have enrolled in and your selected categories.
+        </p>
+    </div>
+
+    @if (Model == null || Model.Count == 0)
+    {
+        <div class="card p-4 text-center">
+            <h4>No enrolments yet</h4>
+            <p class="text-muted">
+                You haven't enrolled in any races. Find your next challenge!
+            </p>
+
+            <div>
+                <a asp-controller="Participant"
+                   asp-action="Events"
+                   class="btn btn-primary">
+                    Browse Events
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <div class="card p-3">
+                    <h6 class="text-muted">Total Enrolments</h6>
+                    <h2 class="fw-bold text-primary">@Model.Count</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+
+                        <div class="card-header text-white"
+                             style="background-color:#101827;">
+                            <h5 class="mb-0">
+                                @item.event_Name
+                            </h5>
+                        </div>
+
+                        <div class="card-body">
+
+                            <p>
+                                <strong>Category:</strong>
+                                @item.category_Name
+                            </p>
+
+                            <p>
+                                <strong>Event Date:</strong>
+                                @item.event_Date.ToShortDateString()
+                            </p>
+
+                            <p>
+                                <strong>Venue:</strong>
+                                @item.venue
+                            </p>
+
+                            <p>
+                                <strong>Distance:</strong>
+                                @item.race_Distance
+                            </p>
+
+                            <p>
+                                <strong>Enrolment Date:</strong>
+                                @item.enrolment_Date.ToShortDateString()
+                            </p>
+
+                            <p>
+                                <strong>Enrolment ID:</strong>
+                                @item.enrolmentID
+                            </p>
+
+                            <hr />
+
+                            <span class="badge bg-success px-3 py-2">
+                                Enrolled
+                            </span>
+
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

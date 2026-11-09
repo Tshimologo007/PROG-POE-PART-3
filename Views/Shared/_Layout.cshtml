@@ -1,0 +1,182 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - RaceDay</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/RaceCompetitionMVC.styles.css" asp-append-version="true" />
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark shadow-sm mb-4"
+             style="background-color: #101827;">
+
+            <div class="container">
+
+                @if (Context.Session.GetString("Role") == "Participant")
+                {
+                    <a class="navbar-brand fw-bold"
+                       asp-controller="Participant"
+                       asp-action="Index"
+                       style="color: #F97316 !important; letter-spacing: 1px;">
+                        RACEDAY
+                    </a>
+                }
+                else if (Context.Session.GetString("Role") == "Organiser")
+                {
+                    <a class="navbar-brand fw-bold"
+                       asp-controller="Organiser"
+                       asp-action="Index"
+                       style="color: #F97316 !important; letter-spacing: 1px;">
+                        RACEDAY
+                    </a>
+                }
+                else
+                {
+                    <a class="navbar-brand fw-bold"
+                       asp-controller="Account"
+                       asp-action="Login"
+                       style="color: #F97316 !important; letter-spacing: 1px;">
+                        RACEDAY
+                    </a>
+                }
+
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#mainNavbar"
+                        aria-controls="mainNavbar"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="mainNavbar">
+
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                        @if (Context.Session.GetString("Role") == "Participant")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   asp-controller="Participant"
+                                   asp-action="Events">
+                                    Available Events
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   asp-controller="Participant"
+                                   asp-action="MyEnrolments">
+                                    My Enrolments
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   asp-controller="Participant"
+                                   asp-action="MyResults">
+                                    My Results
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   asp-controller="Participant"
+                                   asp-action="Profile">
+                                    My Profile
+                                </a>
+                            </li>
+                        }
+
+                        @if (Context.Session.GetString("Role") == "Organiser")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   asp-controller="Organiser"
+                                   asp-action="Index">
+                                    Dashboard
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   asp-controller="Organiser"
+                                   asp-action="Events">
+                                    Manage Events
+                                </a>
+                            </li>
+                        }
+
+                    </ul>
+
+                    <ul class="navbar-nav">
+
+                        @if (Context.Session.GetString("UserID") == null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   asp-controller="Account"
+                                   asp-action="Login">
+                                    Login
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link fw-bold"
+                                   asp-controller="Account"
+                                   asp-action="Register"
+                                   style="color: #F97316;">
+                                    Register
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <form asp-controller="Account"
+                                  asp-action="Logout"
+                                  method="post"
+                                  class="d-inline">
+
+                                <button type="submit" class="nav-link btn btn-link">
+                                    Logout
+                                </button>
+                            </form>
+                        }
+
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-4">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top text-muted py-3 mt-4">
+        <div class="container text-center">
+            <small>
+                &copy; 2026 RaceDay | Run Your Race. Own Your Day.
+            </small>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+```
+

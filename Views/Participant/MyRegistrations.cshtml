@@ -1,0 +1,58 @@
+﻿@model List<RaceCompetitionMVC.Models.MyRegistrationViewModel>
+
+<h1>My Registrations</h1>
+
+<p>Here are the race events you have registered for.</p>
+
+@if (Model == null || Model.Count == 0)
+{
+    <div class="alert alert-info">
+        You have not registered for any events yet.
+    </div>
+}
+else
+{
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card p-3">
+                    <h4>@item.event_Name</h4>
+
+                    <p>@item.description</p>
+
+                    <p>
+                        <strong>Event Date:</strong>
+                        @item.event_Date.ToShortDateString()
+                    </p>
+
+                    <p>
+                        <strong>Venue:</strong>
+                        @item.venue
+                    </p>
+
+                    <p>
+                        <strong>Distance:</strong>
+                        @item.race_Distance
+                    </p>
+
+                    <p>
+                        <strong>Registration Date:</strong>
+                        @item.registration_Date.ToShortDateString()
+                    </p>
+
+                    <span class="badge bg-success">
+                        Registered
+                    </span>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<a asp-controller="Participant"
+   asp-action="Index"
+   class="btn btn-secondary">
+    Back to Dashboard
+</a>
+

@@ -1,0 +1,129 @@
+﻿@using System.Text.Json
+@model List<JsonElement>
+
+@{
+    var raceEvent = ViewBag.Event as RaceCompetitionMVC.Models.EventViewModel;
+    var existingResults = ViewBag.ExistingResults as List<JsonElement>;
+}
+
+<h1>Enter Race Results</h1>
+
+@if (raceEvent != null)
+{
+    <h4>@raceEvent.event_Name</h4>
+    <p>Event date: @raceEvent.event_Date.ToShortDateString()</p>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+@if (Model == null || Model.Count == 0)
+{
+    <p>No participants have enrolled in this event yet.</p>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Participant</th>
+                <th>Category</th>
+                <th>Finish Time</th>
+                <th>Position</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var enrolment in Model)
+            {
+                var enrolmentID = enrolment.GetProperty("enrolmentID").GetInt32();
+
+                JsonElement? savedResult = null;
+
+                if (existingResults != null)
+                {
+                    foreach (var result in existingResults)
+                    {
+                        if (result.ValueKind == JsonValueKind.Object &&
+                        result.TryGetProperty("enrolmentID", out var savedEnrolmentID) &&
+                        savedEnrolmentID.GetInt32() == enrolmentID)
+                        {
+                            savedResult = result;
+                            break;
+                        }
+                    }
+                }
+                <tr>
+                    <td>
+                        @enrolment.GetProperty("name").GetString()
+                        @enrolment.GetProperty("surname").GetString()
+                    </td>
+                    <td>
+                        @enrolment.GetProperty("category_Name").GetString()
+                    </td>
+
+                    @if (savedResult.HasValue)
+                    {
+                        <td>
+                            @(savedResult.Value.TryGetProperty("finish_time", out var finishTime)
+                                            ? finishTime.ToString()
+                                            : "Not available")
+                                                          </td>
+                                                          <td>
+                            @(savedResult.Value.TryGetProperty("position", out var position)
+                                            ? position.ToString()
+                                            : "Not available")
+            </td>
+            <td><span class="badge bg-success">Saved</span></td>
+                        }
+                    else
+                    {
+                        <td colspan="2">
+                            <form asp-action="SaveResult"
+                                  asp-controller="Organiser"
+                                  method="post"
+                                  class="d-flex gap-2">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden" name="eventID"
+                                       value="@raceEvent.eventID" />
+
+                                <input type="hidden" name="enrolmentID"
+                                       value="@enrolmentID" />
+
+                                <input type="hidden" name="distance"
+                                       value="@raceEvent.race_Distance" />
+
+                                <input type="hidden" name="completionStatus"
+                                       value="Completed" />
+
+                                <input type="text" name="finish_time"
+                                       class="form-control"
+                                       placeholder="00:45:32" required />
+
+                                <input type="text" name="position"
+                                       class="form-control"
+                                       placeholder="1st" required />
+
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    Save
+                                </button>
+                            </form>
+                        </td>
+                        <td></td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<a asp-action="Events" class="btn btn-secondary">Back to Events</a>

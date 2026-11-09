@@ -1,0 +1,77 @@
+﻿@model RaceCompetitionMVC.Models.EventViewModel
+
+<h1>Edit Race Event</h1>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+
+    <input type="hidden" asp-for="eventID" />
+    <input type="hidden" asp-for="bannerImage" />
+
+    <div class="form-group">
+        <label asp-for="event_Name"></label>
+        <input asp-for="event_Name" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="description"></label>
+        <textarea asp-for="description" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="townID"></label>
+        <input asp-for="townID" type="number" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="event_Date"></label>
+        <input asp-for="event_Date" type="date" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="event_Type"></label>
+        <input asp-for="event_Type" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="venue"></label>
+        <input asp-for="venue" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="race_Distance"></label>
+        <input asp-for="race_Distance" class="form-control" />
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.bannerImage))
+    {
+        <div class="form-group mt-3">
+            <label>Current Event Banner</label>
+            <br />
+            <img src="@($"https://localhost:7084/api/images/{Model.bannerImage}")"
+                 alt="Current event banner"
+                 style="max-width: 350px; max-height: 200px; object-fit: cover;" />
+        </div>
+    }
+
+    <div class="form-group mt-3">
+        <label for="bannerFile">Upload New Banner (Optional)</label>
+        <input type="file"
+               name="bannerFile"
+               id="bannerFile"
+               class="form-control"
+               accept="image/png,image/jpeg,image/webp" />
+        <small class="text-muted">JPG, PNG or WEBP. Maximum 5 MB. Leave blank to keep the current banner.</small>
+    </div>
+
+    <br />
+
+    <button type="submit" class="btn btn-success">
+        Save Changes
+    </button>
+
+    <a asp-action="Events" class="btn btn-secondary">
+        Cancel
+    </a>
+
+</form>
+

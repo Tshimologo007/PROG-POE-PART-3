@@ -1,0 +1,23 @@
+﻿<h1>Participant Dashboard</h1>
+
+<p>Welcome to your participant dashboard!</p>
+
+<a asp-controller="Participant"
+   asp-action="Events"
+   class="btn btn-primary">
+    View Available Events
+</a>
+
+<a asp-controller="Participant"
+   asp-action="MyRegistrations"
+   class="btn btn-primary">
+    My Registrations
+</a>
+
+<form asp-controller="Account" asp-action="Logout" method="post">
+    @Html.AntiForgeryToken()
+
+    <button type="submit" class="btn btn-danger">
+        Logout
+    </button>
+</form>

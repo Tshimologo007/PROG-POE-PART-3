@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "My Profile";
+    var name = ViewBag.Name as string ?? "";
+    var surname = ViewBag.Surname as string ?? "";
+    var profileImage = ViewBag.ProfileImage as string;
+}
+
+<h1>My Profile</h1>
+
+<div class="card p-4" style="max-width: 500px;">
+
+    @if (!string.IsNullOrEmpty(profileImage))
+    {
+        <img src="@($"https://localhost:7084/api/images/{profileImage}")"
+             alt="Profile picture"
+             style="width:150px;height:150px;object-fit:cover;border-radius:50%;" />
+    }
+    else
+    {
+        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center"
+             style="width:150px;height:150px;">
+            <span>No picture</span>
+        </div>
+    }
+
+    <h3 class="mt-3">@name @surname</h3>
+
+    <hr />
+
+    <h5>Upload Profile Picture</h5>
+
+    <form asp-action="UploadProfilePicture"
+          method="post"
+          enctype="multipart/form-data">
+
+        <input type="file"
+               name="profileFile"
+               class="form-control"
+               accept="image/png,image/jpeg,image/webp"
+               required />
+
+        <button type="submit" class="btn btn-primary mt-3">
+            Upload Picture
+        </button>
+    </form>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <p class="text-success mt-3">@TempData["SuccessMessage"]</p>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <p class="text-danger mt-3">@TempData["ErrorMessage"]</p>
+    }
+
+</div>
+

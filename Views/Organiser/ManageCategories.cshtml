@@ -1,0 +1,122 @@
+﻿@model RaceCompetitionMVC.Models.ManageEventCategoriesViewModel
+
+<h1>Manage Event Categories</h1>
+
+<h4>@Model.Event.event_Name</h4>
+
+<p>Assign the available categories to this event.</p>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<hr />
+
+<h3>Assign a Category</h3>
+
+@if (Model.AvailableCategories.Any())
+{
+    <form asp-controller="Organiser"
+          asp-action="AssignCategory"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+        <input type="hidden"
+               name="eventID"
+               value="@Model.Event.eventID" />
+
+        <div class="mb-3">
+            <label class="form-label">Select Category</label>
+
+            <select name="categoryID" class="form-select" required>
+                <option value="">-- Select a Category --</option>
+
+                @foreach (var category in Model.AvailableCategories)
+                {
+                    <option value="@category.categoryID">
+                        @category.category_Name - @category.description
+                    </option>
+                }
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">
+            Assign Category
+        </button>
+    </form>
+}
+else
+{
+    <p>All available categories have been assigned to this event.</p>
+}
+
+<hr />
+
+<h3>Assigned Categories</h3>
+
+@if (Model.AssignedCategories.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Category Name</th>
+                <th>Description</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model.AssignedCategories)
+            {
+                <tr>
+                    <td>@item.category_Name</td>
+                    <td>@item.description</td>
+                    <td>
+                        <form asp-controller="Organiser"
+                              asp-action="RemoveCategory"
+                              method="post">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="eventCategoryID"
+                                   value="@item.eventCategoryID" />
+
+                            <input type="hidden"
+                                   name="eventID"
+                                   value="@Model.Event.eventID" />
+
+                            <button type="submit"
+                                    class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Remove this category from the event?');">
+                                Remove
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No categories have been assigned to this event yet.</p>
+}
+
+<a asp-controller="Organiser"
+   asp-action="Events"
+   class="btn btn-secondary">
+    Back to Events
+</a>
+
